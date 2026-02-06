@@ -1,0 +1,5 @@
+{
+    "display_name": "Weather + Calendar",
+    "id": "weather_calendar",
+    "class": "WeatherCalendar"
+}
