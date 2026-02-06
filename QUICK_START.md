@@ -75,6 +75,29 @@ sudo journalctl -u inkypi -f
 
 ## 📋 Opción B: Instalación Limpia (Sin InkyPi previo)
 
+### ⚠️ IMPORTANTE: Antes de empezar
+
+Este guide instala **TU VERSIÓN CON WEATHER CALENDAR**, no la versión original de InkyPi.
+
+**Tienes 3 opciones:**
+
+1. **Subir a GitHub** (Recomendado)
+   - Fork el repo de fatihak/inkypi
+   - Push tus cambios a tu fork
+   - En Paso 2, clona tu fork
+
+2. **Usar directo desde tu máquina**
+   - Copia el directorio completo a la Pi
+   - En Paso 2, usa `scp` en lugar de `git clone`
+
+3. **Subir a un servidor privado**
+   - Hostea tu propio repo Git
+   - Clona desde ahí
+
+**En esta guía usaremos Opción 1** (GitHub). Si prefieres otra, salta a la nota en Paso 2.
+
+---
+
 ### Paso 1: Preparar Pi
 
 ```bash
@@ -88,13 +111,25 @@ sudo apt update && sudo apt upgrade -y
 sudo apt install -y python3 python3-pip python3-venv git chromium-browser
 ```
 
-### Paso 2: Clonar InkyPi
+### Paso 2: Clonar InkyPi (Tu versión con Weather Calendar)
 
 ```bash
 cd /opt
-sudo git clone https://github.com/fatihak/inkypi.git
+# ⚠️ IMPORTANTE: Reemplaza 'tu-usuario' con tu usuario de GitHub
+sudo git clone https://github.com/tu-usuario/inkypi.git
 cd inkypi
+
+# O si es un fork local (sin publicar en GitHub):
+# Copia el directorio directamente:
+# sudo cp -r ~/Documents/InkyPi /opt/inkypi
+# cd /opt/inkypi
 ```
+
+**Notas:**
+- Si tienes el código en GitHub, usa tu URL de fork
+- Si es local, cópialo directamente como se muestra arriba
+- Asegúrate de que **Weather Calendar plugin** esté en `src/plugins/weather_calendar/`
+- Verifica con: `ls src/plugins/weather_calendar/`
 
 ### Paso 3: Setup
 
