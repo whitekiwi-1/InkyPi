@@ -69,9 +69,8 @@ class WeatherCalendar(BasePlugin):
         # Parse weather data
         weather_info = self.parse_weather_data(weather_data, units, tz, time_format)
 
-        # Prepare template params
+        # Prepare template params (no title needed)
         template_params = {
-            "title": settings.get('customTitle', 'Weather & Today\'s Events'),
             "weather": weather_info,
             "events": events_today,
             "units": UNITS.get(units, UNITS['metric']),
@@ -102,19 +101,36 @@ class WeatherCalendar(BasePlugin):
     def parse_weather_data(self, data, units, tz, time_format):
         """
         Parse Open-Meteo response into weather info for 3 days.
-        Returns list of daily forecasts with temp, conditions, etc.
+        Returns list of daily forecasts with temp, conditions, icons, etc.
         """
         daily_data = data.get('daily', {})
         current_data = data.get('current_weather', {})
         
         weather_code_map = {
-            0: "Clear", 1: "Mostly Clear", 2: "Partly Cloudy", 3: "Overcast",
-            45: "Foggy", 48: "Foggy", 51: "Light Rain", 53: "Moderate Rain",
-            55: "Heavy Rain", 61: "Rain", 63: "Heavy Rain", 65: "Very Heavy Rain",
-            71: "Light Snow", 73: "Moderate Snow", 75: "Heavy Snow", 77: "Snow Grains",
-            80: "Light Rain Showers", 81: "Moderate Rain Showers", 82: "Heavy Rain Showers",
-            85: "Light Snow Showers", 86: "Heavy Snow Showers", 95: "Thunderstorm",
-            96: "Thunderstorm with Hail", 99: "Thunderstorm with Hail"
+            0: ("Clear", "☀️"), 
+            1: ("Mostly Clear", "☀️"), 
+            2: ("Partly Cloudy", "⛅"), 
+            3: ("Overcast", "☁️"),
+            45: ("Foggy", "🌫️"), 
+            48: ("Foggy", "🌫️"), 
+            51: ("Light Rain", "🌦️"), 
+            53: ("Moderate Rain", "🌧️"),
+            55: ("Heavy Rain", "⛈️"), 
+            61: ("Rain", "🌧️"), 
+            63: ("Heavy Rain", "⛈️"), 
+            65: ("Very Heavy Rain", "⛈️"),
+            71: ("Light Snow", "🌨️"), 
+            73: ("Moderate Snow", "❄️"), 
+            75: ("Heavy Snow", "❄️"), 
+            77: ("Snow Grains", "❄️"),
+            80: ("Rain Showers", "🌧️"), 
+            81: ("Moderate Showers", "🌧️"), 
+            82: ("Heavy Showers", "⛈️"),
+            85: ("Light Snow Showers", "🌨️"), 
+            86: ("Heavy Snow Showers", "❄️"), 
+            95: ("Thunderstorm", "⛈️"),
+            96: ("Thunderstorm w/ Hail", "⛈️"), 
+            99: ("Thunderstorm w/ Hail", "⛈️")
         }
         
         forecasts = []
@@ -128,12 +144,16 @@ class WeatherCalendar(BasePlugin):
         
         for i in range(min(3, len(times))):  # 3 days
             date_obj = datetime.fromisoformat(times[i])
+            code = weather_codes[i]
+            condition_data = weather_code_map.get(code, ("Unknown", "❓"))
+            
             forecast = {
                 "date": date_obj.strftime("%a, %b %d" if time_format == "24h" else "%a, %m/%d"),
                 "day_name": date_obj.strftime("%A"),
                 "temp_max": f"{int(temps_max[i])}",
                 "temp_min": f"{int(temps_min[i])}",
-                "condition": weather_code_map.get(weather_codes[i], "Unknown"),
+                "condition": condition_data[0],
+                "icon": condition_data[1],
                 "temp_unit": temp_unit
             }
             forecasts.append(forecast)

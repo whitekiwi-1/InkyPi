@@ -12,31 +12,27 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>{{ title }}</h1>
-        </div>
-
-        <!-- Weather Forecast Section -->
+        <!-- Weather Forecast Section (No Title) -->
         <div class="weather-section">
-            <h2>3-Day Forecast</h2>
             <div class="forecast-cards">
                 {% for day in weather %}
                 <div class="forecast-card">
                     <div class="date">{{ day.date }}</div>
+                    <div class="day-name">{{ day.day_name }}</div>
+                    <div class="weather-icon">{{ day.icon }}</div>
                     <div class="condition">{{ day.condition }}</div>
                     <div class="temps">
-                        <span class="max">{{ day.temp_max }}{{ day.temp_unit }}</span>
+                        <span class="max">{{ day.temp_max }}°</span>
                         <span class="separator">/</span>
-                        <span class="min">{{ day.temp_min }}{{ day.temp_unit }}</span>
+                        <span class="min">{{ day.temp_min }}°</span>
                     </div>
                 </div>
                 {% endfor %}
             </div>
         </div>
 
-        <!-- Today's Events Section -->
+        <!-- Today's Events Section (No Title) -->
         <div class="events-section">
-            <h2>Today's Events</h2>
             {% if events %}
                 <div class="events-list">
                     {% for event in events %}
@@ -47,7 +43,7 @@
                     {% endfor %}
                 </div>
             {% else %}
-                <p class="no-events">No events scheduled for today</p>
+                <p class="no-events">No events scheduled</p>
             {% endif %}
         </div>
     </div>
