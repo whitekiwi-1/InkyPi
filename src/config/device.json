@@ -1,0 +1,12 @@
+{
+    "name": "InkyPi Development",
+    "display_type": "mock",
+    "resolution": [800, 480],
+    "orientation": "horizontal",
+    "timezone": "America/New_York",
+    "time_format": "12h",
+    "playlist_config": {
+        "enabled": false,
+        "rotation_interval": 300
+    }
+}

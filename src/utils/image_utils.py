@@ -107,8 +107,24 @@ def take_screenshot(target, dimensions, timeout_ms=None):
         with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as img_file:
             img_file_path = img_file.name
 
+        # Determine which browser executable to use
+        browser_executable = None
+        
+        # Try chromium-headless-shell first (Linux)
+        if os.path.exists("/usr/bin/chromium-headless-shell"):
+            browser_executable = "chromium-headless-shell"
+        # Try Google Chrome on macOS
+        elif os.path.exists("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"):
+            browser_executable = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+        # Try Chromium on macOS
+        elif os.path.exists("/Applications/Chromium.app/Contents/MacOS/Chromium"):
+            browser_executable = "/Applications/Chromium.app/Contents/MacOS/Chromium"
+        # Fallback to chromium-headless-shell in PATH
+        else:
+            browser_executable = "chromium-headless-shell"
+        
         command = [
-            "chromium-headless-shell",
+            browser_executable,
             target,
             "--headless",
             f"--screenshot={img_file_path}",
