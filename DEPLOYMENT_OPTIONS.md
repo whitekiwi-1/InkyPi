@@ -19,7 +19,7 @@ En tu Mac, desde el directorio `/Users/pablojuanes/Documents/InkyPi`:
 
 ```bash
 # Agregar remote a tu fork
-git remote add mi-fork https://github.com/TU-USUARIO/inkypi.git
+git remote add mi-fork https://github.com/whitekiwi-1/InkyPi.git
 
 # Push al branch main de tu fork
 git push mi-fork main
@@ -34,11 +34,11 @@ git push mi-fork weather-calendar
 
 ```bash
 cd /opt
-sudo git clone https://github.com/TU-USUARIO/inkypi.git
+sudo git clone https://github.com/whitekiwi-1/InkyPi.git inkypi
 cd inkypi
 ```
 
-Reemplaza `TU-USUARIO` con tu usuario de GitHub.
+Reemplaza `whitekiwi-1` con tu usuario de GitHub (o usa directamente tu URL si es diferente).
 
 ### Verificar que tiene Weather Calendar
 
