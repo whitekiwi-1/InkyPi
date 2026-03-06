@@ -172,9 +172,16 @@ class WeatherCalendar(BasePlugin):
         for url in calendar_urls:
             if not url.strip():
                 continue
+            
+            # Convert webcal:// to https:// (iCloud calendars use webcal by default)
+            url_str = url.strip()
+            if url_str.startswith('webcal://'):
+                url_str = url_str.replace('webcal://', 'https://', 1)
+            elif url_str.startswith('webcals://'):
+                url_str = url_str.replace('webcals://', 'https://', 1)
                 
             try:
-                response = requests.get(url.strip(), timeout=10)
+                response = requests.get(url_str, timeout=10)
                 response.raise_for_status()
                 
                 cal = icalendar.Calendar.from_ical(response.content)
