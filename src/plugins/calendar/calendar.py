@@ -132,7 +132,14 @@ class Calendar(BasePlugin):
 
     def fetch_calendar(self, calendar_url):
         try:
-            response = requests.get(calendar_url)
+            # Convert webcal:// and webcals:// to https:// (iCloud calendars use webcal by default)
+            url_str = calendar_url.strip()
+            if url_str.startswith('webcal://'):
+                url_str = url_str.replace('webcal://', 'https://', 1)
+            elif url_str.startswith('webcals://'):
+                url_str = url_str.replace('webcals://', 'https://', 1)
+            
+            response = requests.get(url_str)
             response.raise_for_status()
             return icalendar.Calendar.from_ical(response.text)
         except Exception as e:
