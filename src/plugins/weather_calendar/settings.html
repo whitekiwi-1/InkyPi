@@ -126,12 +126,13 @@
     function validateCalendarUrls() {
         const inputs = document.querySelectorAll('input[name="calendarURLs[]"]');
         const statusEl = document.getElementById('saveStatus');
-        const urlRegex = /^https?:\/\/.+\.(ics|ical)$/i;
+        // Accept https://, http://, or webcal://
+        const urlRegex = /^(https?|webcal):\/\/.+/i;
 
         for (let input of inputs) {
             const url = input.value.trim();
             if (url && !urlRegex.test(url)) {
-                statusEl.textContent = '✗ Calendar URLs must be valid HTTPS URLs ending in .ics or .ical';
+                statusEl.textContent = '✗ Calendar URLs must start with http://, https://, or webcal://';
                 statusEl.style.color = '#f44336';
                 return false;
             }

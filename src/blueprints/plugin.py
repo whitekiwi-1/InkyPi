@@ -197,10 +197,9 @@ def save_plugin_settings():
                 urls = [url.strip() for url in urls if url.strip()]
                 
                 for url in urls:
-                    if not url.startswith("http://") and not url.startswith("https://"):
-                        return jsonify({"error": "Calendar URLs must start with http:// or https://"}), 400
-                    if not (url.endswith(".ics") or url.endswith(".ical")):
-                        return jsonify({"error": "Calendar URLs must end with .ics or .ical"}), 400
+                    # Accept http://, https://, or webcal://
+                    if not (url.startswith("http://") or url.startswith("https://") or url.startswith("webcal://")):
+                        return jsonify({"error": "Calendar URLs must start with http://, https://, or webcal://"}), 400
                 
                 # Replace with cleaned list
                 if urls:
