@@ -25,7 +25,7 @@
         <div class="settings-group">
             <label>iCloud Calendar URLs</label>
             <div id="calendarUrlsContainer">
-                <input type="text" name="calendarURLs[]" class="calendar-url-input" placeholder="Paste iCloud calendar .ics URL" pattern="https?://.+">
+                <input type="text" name="calendarURLs[]" class="calendar-url-input" placeholder="Paste iCloud calendar .ics URL" pattern="(https?|webcal)://.+">
             </div>
             <button type="button" class="btn-secondary" onclick="addCalendarUrl()">+ Add Another Calendar</button>
         </div>
@@ -76,7 +76,7 @@
                             input.name = 'calendarURLs[]';
                             input.className = 'calendar-url-input';
                             input.placeholder = 'Paste iCloud calendar .ics URL';
-                            input.pattern = 'https?://.+';
+                            input.pattern = '(https?|webcal)://.+';
                             input.value = url;
                             container.appendChild(input);
                         });
@@ -198,7 +198,7 @@
         input.name = 'calendarURLs[]';
         input.className = 'calendar-url-input';
         input.placeholder = 'Paste iCloud calendar .ics URL';
-        input.pattern = 'https?://.+';
+        input.pattern = '(https?|webcal)://.+';
         container.appendChild(input);
     }
 </script>
