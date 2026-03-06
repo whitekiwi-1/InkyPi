@@ -69,6 +69,13 @@ class WeatherCalendar(BasePlugin):
         # Parse weather data
         weather_info = self.parse_weather_data(weather_data, units, tz, time_format)
 
+        # Get current time for update timestamp
+        now = datetime.now(tz)
+        if time_format == "12h":
+            last_update = now.strftime("%m/%d %I:%M %p")
+        else:
+            last_update = now.strftime("%d/%m %H:%M")
+
         # Prepare template params (no title needed)
         template_params = {
             "weather": weather_info,
@@ -76,7 +83,8 @@ class WeatherCalendar(BasePlugin):
             "units": UNITS.get(units, UNITS['metric']),
             "timezone": timezone_str,
             "time_format": time_format,
-            "plugin_settings": settings
+            "plugin_settings": settings,
+            "last_update": last_update
         }
 
         dimensions = device_config.get_resolution()
