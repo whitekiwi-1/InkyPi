@@ -37,9 +37,86 @@
             Use system timezone from device config
         </label>
     </div>
+
+    <div class="settings-group">
+        <button type="submit" class="btn-primary">Save Settings</button>
+        <span id="saveStatus" class="save-status"></span>
+    </div>
 </form>
 
 <script>
+    // Load saved settings when the form loads
+    document.addEventListener('DOMContentLoaded', function() {
+        loadSavedSettings();
+    });
+
+    // Load previously saved settings from device.json
+    function loadSavedSettings() {
+        fetch('/api/get_plugin_settings/weather_calendar')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.settings) {
+                    const settings = data.settings;
+                    
+                    // Set basic fields
+                    if (settings.latitude) document.getElementById('latitude').value = settings.latitude;
+                    if (settings.longitude) document.getElementById('longitude').value = settings.longitude;
+                    if (settings.units) document.getElementById('units').value = settings.units;
+                    
+                    // Load calendar URLs
+                    if (settings['calendarURLs[]'] || settings.calendarURLs) {
+                        const urls = settings['calendarURLs[]'] || settings.calendarURLs;
+                        const container = document.getElementById('calendarUrlsContainer');
+                        container.innerHTML = ''; // Clear default input
+                        
+                        const urlArray = Array.isArray(urls) ? urls : [urls];
+                        urlArray.forEach((url, index) => {
+                            const input = document.createElement('input');
+                            input.type = 'text';
+                            input.name = 'calendarURLs[]';
+                            input.className = 'calendar-url-input';
+                            input.placeholder = 'Paste iCloud calendar .ics URL';
+                            input.pattern = 'https?://.+';
+                            input.value = url;
+                            container.appendChild(input);
+                        });
+                    }
+                }
+            })
+            .catch(error => console.log('No saved settings found:', error));
+    }
+
+    // Handle form submission to save settings
+    document.getElementById('weatherCalendarSettingsForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const statusEl = document.getElementById('saveStatus');
+
+        fetch('/save_plugin_settings', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                statusEl.textContent = '✓ Settings saved successfully';
+                statusEl.style.color = '#4CAF50';
+                setTimeout(() => {
+                    statusEl.textContent = '';
+                }, 3000);
+            } else {
+                statusEl.textContent = '✗ Error: ' + (data.error || 'Unknown error');
+                statusEl.style.color = '#f44336';
+            }
+        })
+        .catch(error => {
+            statusEl.textContent = '✗ Error: ' + error.message;
+            statusEl.style.color = '#f44336';
+            console.error('Error:', error);
+        });
+    });
+
     function addCalendarUrl() {
         const container = document.getElementById('calendarUrlsContainer');
         const input = document.createElement('input');
@@ -86,5 +163,26 @@
 
     .btn-secondary:hover {
         background-color: #e0e0e0;
+    }
+
+    .btn-primary {
+        padding: 10px 20px;
+        background-color: #2196F3;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .btn-primary:hover {
+        background-color: #0b7dda;
+    }
+
+    .save-status {
+        margin-left: 10px;
+        font-weight: bold;
+        display: inline-block;
     }
 </style>

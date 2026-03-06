@@ -154,3 +154,49 @@ def update_now():
         return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
     return jsonify({"success": True, "message": "Display updated"}), 200
+
+@plugin_bp.route('/save_plugin_settings', methods=['POST'])
+def save_plugin_settings():
+    """Save plugin-specific settings to device.json"""
+    device_config = current_app.config['DEVICE_CONFIG']
+
+    try:
+        form_data = parse_form(request.form)
+        form_data.update(handle_request_files(request.files))
+        plugin_id = form_data.pop("plugin_id", None)
+
+        if not plugin_id:
+            return jsonify({"error": "plugin_id is required"}), 400
+
+        # Get the current plugin settings from device config
+        plugin_settings = device_config.get_config("plugin_settings", {})
+        if plugin_id not in plugin_settings:
+            plugin_settings[plugin_id] = {}
+
+        # Update the plugin settings with the new values
+        plugin_settings[plugin_id].update(form_data)
+
+        # Save the updated settings to device.json
+        device_config.update_value("plugin_settings", plugin_settings, write=True)
+
+        logger.info(f"Saved settings for plugin '{plugin_id}'")
+        return jsonify({"success": True, "message": f"Settings saved for {plugin_id}"})
+
+    except Exception as e:
+        logger.exception(f"Error saving plugin settings: {str(e)}")
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
+
+@plugin_bp.route('/api/get_plugin_settings/<plugin_id>', methods=['GET'])
+def get_plugin_settings(plugin_id):
+    """Retrieve saved settings for a specific plugin"""
+    device_config = current_app.config['DEVICE_CONFIG']
+
+    try:
+        plugin_settings = device_config.get_config("plugin_settings", {})
+        settings = plugin_settings.get(plugin_id, {})
+
+        return jsonify({"success": True, "settings": settings})
+
+    except Exception as e:
+        logger.exception(f"Error retrieving plugin settings: {str(e)}")
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
