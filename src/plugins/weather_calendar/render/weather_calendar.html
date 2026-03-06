@@ -10,7 +10,7 @@
         body {
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             margin: 0;
-            padding: 12px;
+            padding: 10px;
             background-color: #fff;
             color: #000;
             display: flex;
@@ -26,7 +26,7 @@
             height: 100%;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .weather-section {
@@ -39,12 +39,12 @@
         .forecast-cards {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 8px;
         }
 
         .forecast-card {
             border: 2px solid #000;
-            padding: 12px;
+            padding: 10px;
             text-align: center;
             background-color: #fff;
             display: flex;
@@ -54,23 +54,23 @@
         }
 
         .forecast-card .date {
-            font-size: 12px;
+            font-size: 10px;
             font-weight: 900;
-            margin-bottom: 2px;
-            letter-spacing: 0.3px;
+            margin-bottom: 1px;
+            letter-spacing: 0.2px;
         }
 
         .forecast-card .day-name {
-            font-size: 10px;
+            font-size: 8px;
             font-weight: bold;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             color: #000;
         }
 
         .forecast-card .weather-icon {
-            font-size: 32px;
-            margin-bottom: 6px;
-            height: 36px;
+            font-size: 28px;
+            margin-bottom: 4px;
+            height: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -78,20 +78,20 @@
         }
 
         .forecast-card .condition {
-            font-size: 9px;
-            margin-bottom: 6px;
-            min-height: 18px;
+            font-size: 7px;
+            margin-bottom: 4px;
+            min-height: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            line-height: 1.1;
+            line-height: 1.0;
         }
 
         .forecast-card .temps {
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 900;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
         }
 
         .forecast-card .temps .max {
@@ -99,7 +99,7 @@
         }
 
         .forecast-card .temps .separator {
-            margin: 0 4px;
+            margin: 0 3px;
             color: #000;
         }
 
@@ -113,40 +113,40 @@
             flex-direction: column;
             justify-content: center;
             border-top: 2px solid #000;
-            padding-top: 10px;
+            padding-top: 8px;
         }
 
         .events-list {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 5px;
             overflow-y: auto;
             max-height: 100%;
         }
 
         .event-item {
             display: flex;
-            padding: 8px;
+            padding: 6px;
             border-left: 2px solid #000;
             background-color: #fff;
             align-items: flex-start;
-            gap: 8px;
+            gap: 6px;
         }
 
         .event-item .time {
             font-weight: 900;
-            min-width: 50px;
+            min-width: 40px;
             color: #000;
-            font-size: 9px;
+            font-size: 7px;
             flex-shrink: 0;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.2px;
         }
 
         .event-item .title {
             flex: 1;
             word-break: break-word;
-            font-size: 10px;
-            line-height: 1.2;
+            font-size: 8px;
+            line-height: 1.1;
             font-weight: 600;
             color: #000;
         }
@@ -155,8 +155,8 @@
             text-align: center;
             color: #000;
             font-weight: 700;
-            padding: 12px;
-            font-size: 10px;
+            padding: 10px;
+            font-size: 8px;
         }
 
         @media (max-width: 768px) {
@@ -165,50 +165,50 @@
             }
             
             .container {
-                padding: 10px;
-                gap: 10px;
+                padding: 8px;
+                gap: 8px;
             }
 
             .forecast-card {
-                padding: 10px;
+                padding: 8px;
                 border: 2px solid #000;
             }
 
             .forecast-card .date {
-                font-size: 11px;
+                font-size: 9px;
             }
 
             .forecast-card .day-name {
-                font-size: 9px;
+                font-size: 7px;
             }
 
             .forecast-card .weather-icon {
-                font-size: 28px;
-                height: 32px;
+                font-size: 24px;
+                height: 26px;
             }
 
             .forecast-card .condition {
-                font-size: 8px;
-                min-height: 16px;
+                font-size: 7px;
+                min-height: 13px;
             }
 
             .forecast-card .temps {
-                font-size: 12px;
+                font-size: 11px;
             }
 
             .event-item {
-                padding: 7px;
+                padding: 6px;
                 border-left: 2px solid #000;
-                font-size: 9px;
+                font-size: 7px;
             }
 
             .event-item .time {
-                font-size: 8px;
-                min-width: 45px;
+                font-size: 7px;
+                min-width: 35px;
             }
 
             .event-item .title {
-                font-size: 9px;
+                font-size: 8px;
             }
         }
     </style>

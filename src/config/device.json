@@ -1,7 +1,7 @@
 {
     "name": "InkyPi Development",
-    "display_type": "mock",
-    "resolution": [525, 338],
+    "display_type": "inky",
+    "resolution": [450, 300],
     "orientation": "horizontal",
     "timezone": "America/New_York",
     "time_format": "12h",
