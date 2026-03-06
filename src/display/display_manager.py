@@ -76,7 +76,16 @@ class DisplayManager:
 
         # Resize and adjust orientation
         image = change_orientation(image, self.device_config.get_config("orientation"))
-        image = resize_image(image, self.device_config.get_resolution(), image_settings)
+        
+        # For Inky displays, always use 800x480 hardware resolution
+        # regardless of what's configured in device.json
+        display_type = self.device_config.get_config("display_type", default="inky")
+        if display_type == "inky":
+            hardware_resolution = [800, 480]
+        else:
+            hardware_resolution = self.device_config.get_resolution()
+        
+        image = resize_image(image, hardware_resolution, image_settings)
         if self.device_config.get_config("inverted_image"): image = image.rotate(180)
         image = apply_image_enhancement(image, self.device_config.get_config("image_settings"))
 
