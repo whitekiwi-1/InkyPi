@@ -40,6 +40,13 @@ class WeatherCalendar(BasePlugin):
         if not lat or not long:
             raise RuntimeError("Latitude and Longitude are required.")
 
+        # Convert to float if they're strings
+        try:
+            lat = float(lat)
+            long = float(long)
+        except (ValueError, TypeError):
+            raise RuntimeError("Latitude and Longitude must be valid numbers.")
+
         units = settings.get('units', 'metric')
         if units not in ['metric', 'imperial']:
             raise RuntimeError("Units must be 'metric' or 'imperial'.")

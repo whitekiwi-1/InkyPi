@@ -86,12 +86,85 @@
             .catch(error => console.log('No saved settings found:', error));
     }
 
+    // Validate coordinates
+    function validateCoordinates() {
+        const lat = document.getElementById('latitude').value;
+        const lon = document.getElementById('longitude').value;
+        const statusEl = document.getElementById('saveStatus');
+
+        if (!lat || !lon) {
+            statusEl.textContent = '✗ Latitude and Longitude are required';
+            statusEl.style.color = '#f44336';
+            return false;
+        }
+
+        const latNum = parseFloat(lat);
+        const lonNum = parseFloat(lon);
+
+        if (isNaN(latNum) || isNaN(lonNum)) {
+            statusEl.textContent = '✗ Coordinates must be valid numbers';
+            statusEl.style.color = '#f44336';
+            return false;
+        }
+
+        if (latNum < -90 || latNum > 90) {
+            statusEl.textContent = '✗ Latitude must be between -90 and 90';
+            statusEl.style.color = '#f44336';
+            return false;
+        }
+
+        if (lonNum < -180 || lonNum > 180) {
+            statusEl.textContent = '✗ Longitude must be between -180 and 180';
+            statusEl.style.color = '#f44336';
+            return false;
+        }
+
+        return true;
+    }
+
+    // Validate calendar URLs
+    function validateCalendarUrls() {
+        const inputs = document.querySelectorAll('input[name="calendarURLs[]"]');
+        const statusEl = document.getElementById('saveStatus');
+        const urlRegex = /^https?:\/\/.+\.(ics|ical)$/i;
+
+        for (let input of inputs) {
+            const url = input.value.trim();
+            if (url && !urlRegex.test(url)) {
+                statusEl.textContent = '✗ Calendar URLs must be valid HTTPS URLs ending in .ics or .ical';
+                statusEl.style.color = '#f44336';
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     // Handle form submission to save settings
     document.getElementById('weatherCalendarSettingsForm').addEventListener('submit', function(e) {
         e.preventDefault();
 
-        const formData = new FormData(this);
         const statusEl = document.getElementById('saveStatus');
+        statusEl.textContent = '';
+
+        // Validate coordinates
+        if (!validateCoordinates()) {
+            return;
+        }
+
+        // Validate calendar URLs
+        if (!validateCalendarUrls()) {
+            return;
+        }
+
+        const formData = new FormData(this);
+
+        // Clean up empty calendar URLs
+        const allUrls = formData.getAll('calendarURLs[]').filter(url => url.trim() !== '');
+        formData.delete('calendarURLs[]');
+        allUrls.forEach(url => {
+            formData.append('calendarURLs[]', url.trim());
+        });
 
         fetch('/save_plugin_settings', {
             method: 'POST',

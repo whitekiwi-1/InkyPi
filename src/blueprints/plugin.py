@@ -168,6 +168,46 @@ def save_plugin_settings():
         if not plugin_id:
             return jsonify({"error": "plugin_id is required"}), 400
 
+        # Validate weather_calendar specific settings if applicable
+        if plugin_id == "weather_calendar":
+            if "latitude" in form_data:
+                try:
+                    lat = float(form_data["latitude"])
+                    if lat < -90 or lat > 90:
+                        return jsonify({"error": "Latitude must be between -90 and 90"}), 400
+                except ValueError:
+                    return jsonify({"error": "Latitude must be a valid number"}), 400
+            
+            if "longitude" in form_data:
+                try:
+                    lon = float(form_data["longitude"])
+                    if lon < -180 or lon > 180:
+                        return jsonify({"error": "Longitude must be between -180 and 180"}), 400
+                except ValueError:
+                    return jsonify({"error": "Longitude must be a valid number"}), 400
+            
+            # Validate calendar URLs if provided
+            if "calendarURLs[]" in form_data:
+                urls = form_data["calendarURLs[]"]
+                # Handle both single string and list of strings
+                if isinstance(urls, str):
+                    urls = [urls] if urls.strip() else []
+                
+                # Filter out empty URLs
+                urls = [url.strip() for url in urls if url.strip()]
+                
+                for url in urls:
+                    if not url.startswith("http://") and not url.startswith("https://"):
+                        return jsonify({"error": "Calendar URLs must start with http:// or https://"}), 400
+                    if not (url.endswith(".ics") or url.endswith(".ical")):
+                        return jsonify({"error": "Calendar URLs must end with .ics or .ical"}), 400
+                
+                # Replace with cleaned list
+                if urls:
+                    form_data["calendarURLs[]"] = urls
+                else:
+                    form_data.pop("calendarURLs[]", None)
+
         # Get the current plugin settings from device config
         plugin_settings = device_config.get_config("plugin_settings", {})
         if plugin_id not in plugin_settings:
